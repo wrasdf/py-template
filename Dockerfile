@@ -6,5 +6,5 @@ RUN apk --update add build-base gcc abuild binutils linux-headers libffi-dev \
   rm -rf /tmp/* /var/cache/apk/*
 
 COPY requirements.txt /app
-COPY .pylintrc /app
+COPY .pylintrc /root/
 RUN pip install --upgrade pip && pip install -r /app/requirements.txt

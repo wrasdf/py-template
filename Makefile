@@ -13,4 +13,4 @@ test: build
 	docker run --rm -it -v $(HOME)/.kube:/root/.kube -v $$(pwd):/app $(IMAGE):$(version) python -m unittest
 
 lint: build
-	docker run --rm -it -v $(HOME)/.kube:/root/.kube -v $$(pwd):/app $(IMAGE):$(version) pylint ./run.py --disable=missing-docstring
+	docker run --rm -it -v $(HOME)/.kube:/root/.kube -v $$(pwd):/app $(IMAGE):$(version) pylint ./run.py
