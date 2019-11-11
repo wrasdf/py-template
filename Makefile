@@ -1,16 +1,23 @@
-.PHONY: build sh test lint
+.PHONY: sh ut lint
 
-version := latest
-IMAGE := py
+IMAGE := ikerry/aws-es-proxy
+DCB := docker-compose build
+DCR := docker-compose run --rm
 
-build:
-	docker build -t $(IMAGE):$(version) .
+ut:
+	$(DCB) ut
+	$(DCR) ut
 
-sh: build
-	docker run --rm -it -v $(HOME)/.kube:/root/.kube -v $$(pwd):/app -w /app $(IMAGE):$(version) /bin/bash
+lint:
+	$(DCB) lint
+	$(DCR) lint
 
-test: build
-	docker run --rm -it -v $(HOME)/.kube:/root/.kube -v $$(pwd):/app $(IMAGE):$(version) python -m unittest
+sh:
+	$(DCB) sh
+	$(DCR) sh
 
-lint: build
-	docker run --rm -it -v $(HOME)/.kube:/root/.kube -v $$(pwd):/app $(IMAGE):$(version) pylint ./run.py
+build-%:
+	docker build -t $(IMAGE):$(*) .
+	docker tag $(IMAGE):$(*) $(IMAGE):latest
+	docker push $(IMAGE):latest
+	docker push $(IMAGE):$(*)

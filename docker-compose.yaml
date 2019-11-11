@@ -1,0 +1,41 @@
+---
+version: '3.2'
+
+services:
+
+  base: &base
+    build:
+      context: .
+    working_dir: /app
+    volumes:
+      - ".:/app"
+      - "$HOME/.aws:/root/.aws"
+    ports:
+      - 9200:9200
+
+  ut:
+    <<: *base
+    entrypoint:
+      - python
+      - -m
+      - unittest
+
+  lint:
+    <<: *base
+    entrypoint:
+      - pylint
+      - /app
+
+  sh:
+    <<: *base
+    entrypoint:
+      - bash
+
+  aws:
+    image: mesosphere/aws-cli:1.14.5
+    working_dir: /app
+    environment:
+      - AWS_DEFAULT_REGION=ap-southeast-2
+    volumes:
+      - .:/app
+      - $HOME/.aws:/root/.aws
