@@ -1,7 +1,7 @@
-FROM python:3.8.0-alpine3.10
+FROM python:3.8.2-alpine3.11
 WORKDIR /app
 
-RUN apk --update add build-base gcc abuild binutils linux-headers libffi-dev \
+RUN apk --update add build-base gcc abuild binutils linux-headers libffi-dev libressl-dev \
     bash curl && \
   rm -rf /tmp/* /var/cache/apk/*
 
