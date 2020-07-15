@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage () {
+  echo "Usage: $0 <action> [<output_dir>]"
+  echo "where:"
+  echo " <action> = <--pin|--upgrade>"
+  echo " --pin      - freezes dependencies to a specific version based on requirements specified in *.in file"
+  echo " --upgrade  - upgrades dependencies to a specific version based on requirements specified in *.in file"
+  exit 1
+}
+
+[[ "$#" -lt 1 ]] && usage
+[[ "$#" -gt 2 ]] && usage
+[[ ! "${1}" =~ ^(--pin|--upgrade)$ ]] && usage
+action="${1}"
+requirements_dir="requirements"
+output_dir="${2:-${requirements_dir}}"
+mkdir -p "$output_dir" # ensure output_dir exists
+requirements_input_files=($(ls requirements/*.in))
+
+for input_file in "${requirements_input_files[@]}"; do
+  no_extension="${input_file/\.in/}"
+  requirements="${no_extension/*\//}"
+  output_file="${output_dir}/${requirements}.txt"
+
+  cmd_args=("${input_file}" "--output-file" "${output_file}")
+  if [[ ${action} == "--upgrade" ]]; then
+    cmd_args+=("--upgrade");
+  fi
+
+  echo "generating [${action/--/}] ${output_file} from ${input_file}"
+  docker-compose run --rm deps "${cmd_args[@]}"
+done

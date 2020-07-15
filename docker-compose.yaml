@@ -1,35 +1,94 @@
 ---
-version: '3.2'
+version: '3.8'
 
 services:
 
-  base: &base
+  sh:
     build:
       context: .
+      target: base
     working_dir: /app
     volumes:
       - ".:/app"
       - "$HOME/.aws:/root/.aws"
     ports:
-      - 9200:9200
+      - 5000:5000
 
-  ut:
-    <<: *base
+  server:
+    build:
+      context: .
+      target: release
+    working_dir: /app
+    ports:
+      - "5000:5000"
+    volumes:
+      - "$HOME/.kube:/root/.kube"
+      - "$HOME/.aws:/root/.aws"
+      - "./:/app"
+    environment:
+      DB_HOST: postgresDB
+      DB_NAME: postgres
+      DB_PASSWORD: password1
+      DB_USER: postgres
+      PYTHONPATH: "/app"
+      FLASK_APP: "/app/app/server.py"
+      FLASK_ENV: development
+
+  postgresDB:
+    image: postgres:11.8-alpine
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./src/bin/v1/status/database/data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password1
+      - POSTGRES_DB=postgres
+
+  pgweb:
+    image: sosedoff/pgweb:0.11.6
+    restart: always
+    ports:
+      - "8081:8081"
+    command:
+      - "/usr/bin/pgweb"
+      - "--bind=0.0.0.0"
+      - "--listen=8081"
+      - "--url=postgres://postgres:password1@postgresDB:5432/postgres?sslmode=disable"
+
+  deps:
+    build:
+      context: .
+      target: base
+    working_dir: /app
+    volumes:
+      - "./requirements:/app/requirements"
     entrypoint:
+      - pip-compile
+      - --build-isolation
+      - --no-header
+
+  test:
+    build:
+      context: .
+      target: test
+    working_dir: /app
+    volumes:
+      - "./:/app"
+      - ".pytest_cache:/app/.pytest_cache"
+    command:
       - python
       - -m
-      - unittest
-
-  lint:
-    <<: *base
-    entrypoint:
-      - pylint
-      - /app
-
-  sh:
-    <<: *base
-    entrypoint:
-      - bash
+      - pytest
+      - tests
+      - -o
+      - cache_dir=/app/.pytest_cache
 
   aws:
     image: mesosphere/aws-cli:1.14.5

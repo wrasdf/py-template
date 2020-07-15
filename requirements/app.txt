@@ -1,0 +1,11 @@
+cffi==1.14.0              # via cryptography
+click==7.1.2              # via flask
+cryptography==2.9.2       # via -r requirements/app.in
+flask==1.1.2              # via -r requirements/app.in
+itsdangerous==1.1.0       # via flask
+jinja2==2.11.2            # via flask
+markupsafe==1.1.1         # via jinja2
+psycopg2-binary==2.8.5    # via -r requirements/app.in
+pycparser==2.20           # via cffi
+six==1.15.0               # via cryptography
+werkzeug==1.0.1           # via flask
