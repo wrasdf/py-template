@@ -1,20 +1,21 @@
 .PHONY: sh ut lint
 
-IMAGE := ikerry/aws-es-proxy
 DCB := docker-compose build
 DCR := docker-compose run --rm
-
-ut:
-	$(DCB) ut
-	$(DCR) ut
-
-lint:
-	$(DCB) lint
-	$(DCR) lint
 
 sh:
 	$(DCB) sh
 	$(DCR) sh
+
+test:
+	$(DCB) test
+	$(DCR) test
+
+localdb:
+	./bin/local-db
+
+server:
+	./bin/server
 
 build-%:
 	docker build -t $(IMAGE):$(*) .

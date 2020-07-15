@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+docker kill $(docker ps -aq)
+docker rm -f $(docker ps -aq)
+docker-compose build server
+
+docker-compose up -d postgresDB
+docker-compose up -d pgweb
+docker-compose up -d server

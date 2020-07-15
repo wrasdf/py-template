@@ -1,7 +1,6 @@
-import unittest
-from unittest.mock import MagicMock
+def f():
+    return 3
 
-class TestTemplate(unittest.TestCase):
 
-    def test_template(self):
-        self.assertEqual(True, True)
+def test_function():
+    assert f() == 3
