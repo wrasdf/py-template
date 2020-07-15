@@ -6,13 +6,7 @@ jobs:
       - checkout
       - run:
          name: Unit Test
-<<<<<<< Updated upstream
-         command: |
-            make test
-=======
          command: make test
-
->>>>>>> Stashed changes
 
 workflows:
   version: 2
