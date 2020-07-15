@@ -1,9 +1,23 @@
-from cryptography.fernet import Fernet
+# from cryptography.fernet import Fernet
+#
+# message = "my deep dark secret".encode()
+# key = Fernet(Fernet.generate_key())
+# encrypted = key.encrypt(message)
+# decrypted = key.decrypt(encrypted)
+#
+# print(encrypted)
+# print(decrypted)
 
-message = "my deep dark secret".encode()
-key = Fernet(Fernet.generate_key())
-encrypted = key.encrypt(message)
-decrypted = key.decrypt(encrypted)
+class FOOBAR:
+    __testy = {}
+    def __init__(self, test):
+        self.__testy[test] = test
+    def __str__(self):
+        return f"FOOBAR({self.__testy})"
 
-print(encrypted)
-print(decrypted)
+foo = FOOBAR("foo")
+print(foo)
+
+bar = FOOBAR("bar")
+print(foo)
+print(bar)
