@@ -1,5 +1,5 @@
 from flask import Flask
-from app.services.response_manager import ResponseManager
+from app.services.res_manager import ResponseManager
 
 app = Flask("py-app")
 responseManager = ResponseManager()

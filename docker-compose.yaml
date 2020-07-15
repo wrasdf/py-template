@@ -39,7 +39,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./src/bin/v1/status/database/data:/var/lib/postgresql/data
+      - ./app/services/data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 30s
