@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+docker-compose build lint
+echo "--- Linting style check with black"
+set +e
+docker-compose run --rm --name lint-black lint black --check --diff app tests
+
+echo "--- Linting with flake8..."
+docker-compose run --rm --name lint-flake8 lint flake8 --config /app/.flake

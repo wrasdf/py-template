@@ -4,6 +4,7 @@ from flask import jsonify, make_response
 #     "message": "It works.",
 # }
 
+
 class ResponseManager:
     def __init__(self):
         self.success_status_code = 200

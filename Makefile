@@ -1,4 +1,4 @@
-.PHONY: sh ut lint
+.PHONY: sh test lint server
 
 DCB := docker-compose build
 DCR := docker-compose run --rm
@@ -11,14 +11,8 @@ test:
 	$(DCB) test
 	$(DCR) test
 
-localdb:
-	./bin/local-db
+lint:
+	./bin/lint
 
 server:
 	./bin/server
-
-build-%:
-	docker build -t $(IMAGE):$(*) .
-	docker tag $(IMAGE):$(*) $(IMAGE):latest
-	docker push $(IMAGE):latest
-	docker push $(IMAGE):$(*)

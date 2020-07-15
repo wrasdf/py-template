@@ -90,6 +90,19 @@ services:
       - -o
       - cache_dir=/app/.pytest_cache
 
+  lint:
+    build:
+      context: .
+      target: lint
+    working_dir: /app
+    volumes:
+      - "./:/app"
+      - "./tests:/app/tests"
+      - ".flake:/app/.flake"
+    command:
+      - bash
+      - -c
+      
   aws:
     image: mesosphere/aws-cli:1.14.5
     working_dir: /app
