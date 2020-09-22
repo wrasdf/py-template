@@ -1,6 +1,6 @@
 cffi==1.14.0              # via cryptography
 click==7.1.2              # via flask
-cryptography==2.9.2       # via -r requirements/app.in
+cryptography==3.1.1       # via -r requirements/app.in
 flask==1.1.2              # via -r requirements/app.in
 itsdangerous==1.1.0       # via flask
 jinja2==2.11.2            # via flask
